@@ -15,7 +15,7 @@ import zipfile
 SITE = 'https://mars-program.github.io/pe0400c0-hex-updater-preview/'
 SOURCE = 'Mars-Program/pe0400c0-hex-updater-source'
 VERSION = r'(?:0|[1-9][0-9]{0,2})\.(?:0|[1-9][0-9]{0,2})\.(?:0|[1-9][0-9]{0,2})'
-ROOT_ASSETS = {'index.html', 'app.js', 'channel.js', 'journal.js', 'preferences.js', 'site-context.js', 'style.css'}
+ROOT_ASSETS = {'index.html', 'app.js', 'engine-loader.js', 'channel.js', 'journal.js', 'preferences.js', 'site-context.js', 'style.css'}
 NOTICES = {'DotNet-LICENSE.TXT', 'DotNet-THIRD-PARTY-NOTICES.TXT'}
 GATES = ['BUILD', 'OFFLINE', 'TRANSPORT', 'HARDWARE', 'HMI', 'POWER_LOSS', 'macOSExecution']
 

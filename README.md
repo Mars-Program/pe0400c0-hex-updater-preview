@@ -34,3 +34,7 @@ Old candidates stay immutable. An existing production version cannot be overwrit
 
 Initial 0.1.5 is the retained baseline package, published to verify this trial site.
 No new updater feature or hardware qualification is implied.
+
+## 0.1.6 engine-loading trial
+
+The 0.1.6 candidate adds bounded, integrity-checked engine downloads and explicit startup failures/timeouts. It is a preview only; the private source PR remains open for user acceptance and production remains 0.1.5. Older 0.1.5 candidates stay immutable as diagnostic evidence. The new engine-loader.js runtime module is explicitly allowlisted. Future production promotion must add this reviewed module to its asset allowlist when that candidate is accepted.

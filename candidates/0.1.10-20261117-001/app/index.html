@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Guided local APP HEX validation and Web Serial updating for PE0400C0 and EAO-R02.">
+  <title>HEX Updater · Multi-board</title>
+  <base href="./"><link rel="icon" href="data:,"><link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header><div class="brand"><span class="brand-icon">DI</span><span>DATA IMAGE<small>DEVICE TOOLS</small></span></div><span class="badge">ENGINEERING PREVIEW · 0.1.10</span></header>
+    <section class="intro"><div><p class="eyebrow">PE0400C0 + EAO-R02 / APP FIRMWARE</p><h1>HEX Updater <span>Web</span></h1><p class="lede">Your firmware update, one clear step at a time.</p></div><div class="platform">CHROME<span>Windows 11 · macOS 27</span><small>Local processing · no firmware upload</small></div></section>
+    <div id="environment" class="notice" role="status">Loading the validation engine…</div>
+    <nav class="stepper" aria-label="Update steps">
+      <button id="step-1" disabled aria-current="step"><span>1</span><div>Device<small>Identify BOOT & action</small></div></button>
+      <button id="step-2" disabled><span>2</span><div>Firmware<small>Choose & validate APP</small></div></button>
+      <button id="step-3" disabled><span>3</span><div>Update<small>Wait for the result</small></div></button>
+    </nav>
+    <div class="layout">
+      <section class="card wizard" aria-label="Guided update">
+        <section id="panel-1" aria-labelledby="heading-1">
+          <p class="eyebrow">STEP 1 OF 3</p><h2 id="heading-1" class="panel-title" tabindex="-1">Identify your device</h2>
+          <p class="panel-copy">Connect the USB serial cable. Read the APP and BOOT versions, then choose an available update action.</p>
+          <div class="boot-preference"><label for="board-profile">Circuit board</label><select id="board-profile" disabled><option value="PE0400C0">PE0400C0</option><option value="EAO-R02">EAO-R02 · USB APP update</option></select></div>
+          <div class="connection"><span class="status-dot" id="port-dot"></span><div><strong id="port-name">No device identified</strong><span id="port-detail">921600 baud · 8N1</span></div><button id="connect" class="secondary" disabled>Connect & identify</button></div>
+          <p class="quiet">This step only queries versions and identity. It does not restart the device, enter update mode or write firmware. The port closes after the query.</p>
+          <button id="cancel-identify" class="secondary" hidden disabled>Cancel query</button>
+          <div id="compatibility" class="compatibility-panel" aria-live="polite">
+            <dl class="review"><div><dt>BOOT version</dt><dd id="boot-version">Not identified</dd></div><div><dt>APP version</dt><dd id="app-version">Not identified</dd></div></dl>
+            <p id="compatibility-message">Identify the connected device to see available actions.</p>
+            <details><summary>Compatibility rule</summary><p id="compatibility-rule">No device rule selected.</p></details>
+          </div>
+          <h3 class="action-heading">Available update actions</h3>
+          <div class="update-actions">
+            <div class="update-action"><div><strong id="action-title">APP HEX update</strong><span id="action-app-state">Identify device first</span><p id="action-app-detail">Replaces APP firmware and resets media catalogs.</p></div><button id="choose-action-reset" class="primary" disabled>Choose HEX <span>→</span></button></div>
+            <div class="update-action unavailable"><div><strong>Image update</strong><span id="action-image-state">Identify device first</span><p id="action-image-detail">Image updates are not provided by this tool.</p></div></div>
+            <div class="update-action unavailable"><div><strong>Video update</strong><span id="action-video-state">Identify device first</span><p id="action-video-detail">Video updates are not provided by this tool.</p></div></div>
+          </div>
+        </section>
+        <section id="panel-2" hidden aria-labelledby="heading-2">
+          <p class="eyebrow">STEP 2 OF 3</p><h2 id="heading-2" class="panel-title" tabindex="-1">Choose your APP firmware</h2><p id="firmware-copy" class="panel-copy">Select the compiler-generated .hex file. Your firmware stays on this computer.</p>
+          <label for="firmware" class="file-box"><span class="file-icon">↥</span><strong id="filename">Choose APP HEX</strong><span id="filehint">.hex · up to 32 MiB</span><input id="firmware" type="file" accept=".hex" disabled></label>
+          <p id="inspection-status" class="inline-status" role="status">Choose a HEX to check and prepare it automatically.</p>
+          <div id="orientation-controls" class="boot-preference"><label for="orientation">BOOT update screen</label><select id="orientation" aria-describedby="orientation-scope orientation-feedback" disabled><option value="1" selected>Portrait · 480 × 800</option><option value="2">Landscape · 800 × 480 · clockwise</option></select></div>
+          <p id="orientation-scope" class="scope-inline">Only the BOOT waiting, update and recovery screens. Your APP's display orientation stays unchanged.</p>
+          <p id="orientation-feedback" class="preference-note" role="status">First use: Portrait. Changes are remembered in this Chrome profile.</p>
+          <div id="recommendation" class="recommendation compact-advice" role="status" hidden><div><strong id="recommendation-title"></strong><p id="recommendation-detail"></p></div><button id="use-recommended" class="secondary" hidden disabled>Use Landscape</button></div>
+          <dl class="review"><div><dt>APP HEX</dt><dd id="review-file">—</dd></div><div id="review-display"><dt>BOOT update screen</dt><dd id="review-orientation">—</dd></div></dl>
+          <div class="reset-note"><strong id="operation-title">RESET UPDATE</strong><p id="operation-detail">Replaces the APP and resets image/video catalogs. BOOT firmware is retained.</p></div>
+          <div class="actions"><button id="retry-validation" class="secondary" hidden disabled>Retry file checks</button><button id="back-firmware" class="secondary" disabled>← Back to device</button><button id="update" class="primary" disabled>Review device & update <span>→</span></button></div>
+          <p class="quiet">Next reconnects to the selected device and checks its current identity and capabilities. The APP may enter its update waiting screen. You confirm again before any APP payload is sent.</p>
+        </section>
+        <section id="panel-3" hidden aria-labelledby="heading-3">
+          <p class="eyebrow">STEP 3 OF 3</p><h2 id="heading-3" class="panel-title" tabindex="-1">Update progress and result</h2><p class="panel-copy">Keep the device connected and this page open until the final result.</p>
+          <div class="progress-row"><div><span>YMODEM transfer</span><strong id="transfer-label">—</strong></div><progress id="transfer" max="100" value="0"></progress></div>
+          <div class="progress-row"><div><span id="device-stage">Device verification</span><strong id="device-label">—</strong></div><progress id="device" max="100" value="0"></progress></div>
+          <p class="quiet">Transfer 100% is followed by MCU verification and commit. It is not the final update result.</p>
+          <div id="return-note" class="notice">You can stop before writing starts. Once writing may have started, wait for the result; returning and retrying are locked.</div>
+          <div class="actions"><button id="stop" class="secondary" disabled>Stop before writing</button><button id="retry-prepare" class="secondary" hidden disabled>← Back to device</button><button id="new-update" class="primary" hidden disabled>Start another update</button></div>
+          <p id="outcome-guide" class="inline-status" role="status"></p>
+        </section>
+      </section>
+      <aside class="card operation" aria-label="Current status">
+        <p class="eyebrow">YOUR UPDATE</p>
+        <div class="result" id="result" aria-live="polite"><span id="state-label">GETTING READY</span><h3 id="status">Loading engine</h3><p id="detail">The browser is preparing the local validation engine.</p></div>
+        <div class="summary-strip"><span>Circuit board</span><strong id="summary-board">PE0400C0</strong><span>Identified BOOT</span><strong id="summary-boot">Not identified</strong><span>Firmware</span><strong id="summary-file">Not selected</strong><span id="summary-display-label">BOOT update screen</span><strong id="summary-orientation">Not confirmed</strong></div>
+        <p id="step-guidance" class="quiet">Start by connecting and identifying the device.</p>
+        <div class="metadata" id="metadata" hidden><div><span>APP size</span><strong id="app-size"></strong></div><div><span>APP CRC32</span><code id="app-crc"></code></div><div><span>Package size</span><strong id="package-size"></strong></div><details><summary>Verified file identities</summary><pre id="hashes"></pre></details></div>
+      </aside>
+    </div>
+    <section class="card logs"><div class="log-heading"><div><span class="live-dot"></span><h2>Session log</h2><span id="log-count">0 events</span></div><button id="export" class="secondary" disabled>Export log & result ↓</button></div><pre id="log" aria-label="Session log">Waiting for a firmware file.</pre></section>
+    <footer><span>HEX Updater Web · 0.1.10</span><span>Browser testing is separate from device, HMI and power-loss qualification.</span></footer>
+  </main>
+  <dialog id="confirmation" aria-labelledby="confirmation-title"><form method="dialog">
+    <p class="eyebrow">ONE DEVICE · ONE UPDATE</p><h2 id="confirmation-title">Confirm RESET update</h2>
+    <p>The device below was identified through the selected serial port.</p><pre id="confirm-summary"></pre>
+    <p id="confirm-scope" class="scope-note">Screen orientation affects only the BOOT waiting / update / recovery screens. Your APP's display orientation stays unchanged.</p>
+    <p id="confirm-operation" class="reset-note">This replaces the APP and resets image/video catalogs.</p>
+    <div id="update-reminder" class="confirmation-reminder">
+      <strong>Before updating</strong>
+      <p>Use only one updater at a time. If an earlier update was interrupted or its result is uncertain, go back and resolve it before continuing.</p>
+      <p>Web and local tools keep separate histories. By choosing Update once, you confirm that no earlier update remains incomplete or uncertain.</p>
+    </div>
+    <div class="actions"><button value="cancel" class="secondary" autofocus>Go back without updating</button><button id="confirm-update" value="update" class="primary" aria-describedby="update-reminder">Update once</button></div>
+  </form></dialog>
+  <script src="_framework/blazor.webassembly.js" autostart="false"></script><script type="module" src="app.js"></script>
+</body></html>

@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EAO-R02 USB 首裝 · HEX Updater</title><link rel="stylesheet" href="style.css"><link rel="icon" href="data:,"></head>
+<body><main><header><a class="brand" href="index.html"><span class="brand-icon">DI</span>HEX Updater</a><span>0.1.13 候選版</span></header>
+<section class="intro"><div><p class="eyebrow">EAO-R02</p><h1>USB 首裝</h1><p class="lede">為已啟用、板上只有 BOOT 的新板安裝最小 APP 0.1.4。</p></div></section>
+<section class="card wizard"><h2>選擇測試板與韌體</h2>
+<p>BOOT 0.1.2 請先經 SWD 升到 0.1.3。升級後接 USB，在 Chrome 選取這塊板的序列埠。</p>
+<div class="actions"><button class="secondary" id="port">選擇 USB 序列埠</button><span id="port-state" role="status"></span></div>
+<label class="file-box" for="package"><strong>最小 APP 0.1.4</strong><span id="file-state">選取 .dataimgRESET 檔案</span><input id="package" type="file" accept=".dataimgRESET"></label>
+<h2>備份與首裝</h2><p>先保存完整 8 KiB FRAM 與第一個 64 KiB NOR 區塊。啟用欄位以可還原的加密封包保存。工具會重新開啟備份檔，核對資料後才顯示安裝確認。</p>
+<div class="actions"><button id="start" class="primary" disabled>選擇備份位置並讀取板卡</button></div>
+<p id="state" class="notice" role="status">等待選取板卡與韌體。</p><p id="details" class="quiet"></p>
+<div class="actions"><a id="next" href="index.html">前往一般 APP 更新</a><button class="secondary" id="log" disabled>匯出操作紀錄</button></div></section>
+<dialog id="review"><form method="dialog"><h2>確認首裝最小 APP 0.1.4</h2><p id="review-data"></p><p>本次會重建這塊板的 APP 更新紀錄，並覆寫外部 NOR 第一個 64 KiB。請確認所選 USB 對應手邊這塊測試板。</p><p id="prior" hidden>此瀏覽器有一筆 BOOT 0.1.2 在寫入前遭拒的紀錄。我已確認這是同一塊現場板。成功後將保存本次查驗結果。</p><div class="actions"><button class="secondary" value="cancel" autofocus>取消</button><button class="primary" value="install">確認板卡並安裝一次</button></div></form></dialog>
+</main><script type="module" src="first-install.js"></script></body></html>
